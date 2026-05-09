@@ -16,6 +16,8 @@ Current MVP scope:
 
 ## Run
 
+> You can create a Telegram app from [here](https://my.telegram.org/auth) to obtain an API id and hash. Finally, you will need to create a bot from [BotFather](https://t.me/BotFather) and keep the bot token.
+
 Environment variables:
 
 | Variable | Required | Purpose |
