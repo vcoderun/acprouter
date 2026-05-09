@@ -1,0 +1,43 @@
+# ACP Router - AI Context
+
+## Overview
+This project is an ACP client surface for Telegram. It connects to an ACP agent process over stdio,
+binds ACP sessions to Telegram chats, projects ACP approvals, plan updates, tool updates, and agent
+replies into Telegram, answers ACP approval requests through inline buttons, and renders ACP-exposed
+selection surfaces such as mode, model, config options, and available commands. The default ownership
+model is server-owned: ACP Router should render ACP truth, not invent it.
+
+## Tech Stack & Guidelines for AI Agents:
+
+- **Dependency Management:** `uv`. 
+  - *Rule:* Use `uv`.
+- **Linting & Formatting:** `ruff`. 
+  - *Rule:* Use `ruff` for formatting and linting.
+- **Type Checking:** `basedpyright` and `ty`. 
+  - *Rule:* All new code MUST include strict Python 3.11+ type hints.
+- **Testing:** `pytest`. 
+  - *Rule:* Place tests in the `tests/` directory.
+- **Workflow:** `make`. 
+  - *Rule:* Use `make check`, `make format`, `make tests`, and `make check-coverage` to execute tasks locally.
+
+## Project Structure
+- `src/acprouter/`: ACP client runtime, Telegram gateway, projection helpers, and optional host-tool backends.
+- `tests/`: Test suites.
+- `docs/`: MkDocs Material documentation organized like ACP Kit: Getting Started, Documentation, Examples, API Reference, and About.
+- `docs/getting-started/agent-server.md`: canonical setup page for ACP Kit and acpremote flows.
+- `docs/examples/`: documentation pages that map to runnable files in `examples/`.
+- `examples/`: small integration examples for local ACP Kit targets, in-process ACP agents, and remote ACP bridges.
+
+## Important Runtime Surface
+
+- `TelegramGateway.from_settings(settings)` builds the gateway and spawns the configured ACP subprocess during `gateway.run()`.
+- `TelegramGateway.from_acp_agent(acp_agent, settings)` binds an existing ACP agent object and then starts Telegram during `gateway.run()`.
+- `gateway.run()` owns Telegram app startup, ACP initialization, bot-command registration, idle loop, and shutdown.
+- Required environment is `ACPROUTER_COMMAND`, `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, and `TELEGRAM_BOT_TOKEN`.
+- `ACPROUTER_COMMAND` may be a local ACP Kit stdio adapter command such as `acpkit run examples.pydantic_acp_agent:agent` or `acpkit run examples.langchain_acp_graph:graph`.
+- Remote ACP runtimes can be hosted with `acpkit serve ...` or `acpremote.serve_acp(...)` / `acpremote.serve_command(...)`, then mirrored locally with `acpkit run --addr ws://host:8080/acp/ws`.
+- `examples/acprouter_with_acpkit_instance.py` shows the in-process Python API path: create an ACP agent with ACP Kit and pass it to `TelegramGateway.from_acp_agent(...)`.
+- `examples/acprouter_remote_acp.py` shows the remote Python API path: connect with `acpremote.connect_acp(...)` and pass the proxy agent to `TelegramGateway.from_acp_agent(...)`.
+- ACP-exposed mode, model, config, and available-command surfaces are rendered into Telegram and converted into dynamic commands when the names are Telegram-safe.
+- `ACPROUTER_ENABLE_HOST_TOOLS=true` is the default for ACP client-owned file and terminal requests. These requests still enforce workspace-root and session-cwd guards, require Telegram approval, and return explicit rejection reasons when denied.
+- Telegram reply streaming is client-local. By default ACP Router buffers chunks and sends the final reply once. Incremental edit streaming can be enabled and is throttled to reduce Telegram flood waits.

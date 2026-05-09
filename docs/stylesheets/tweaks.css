@@ -1,0 +1,16 @@
+.hide {
+  display: none;
+}
+
+.callout-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  margin: 1.5rem 0;
+}
+
+.callout-panel {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.35rem;
+  padding: 1rem;
+}

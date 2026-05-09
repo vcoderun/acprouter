@@ -1,0 +1,99 @@
+site_name: ACP Router
+site_description: Telegram ACP client surface for driving ACP agents from chat.
+site_url: https://vcoderun.github.io/acprouter/
+strict: true
+repo_name: vcoderun/acprouter
+repo_url: https://github.com/vcoderun/acprouter
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - toc.follow
+    - content.code.copy
+    - content.tabs.link
+    - content.action.edit
+    - content.action.view
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - src
+          options:
+            docstring_style: google
+            members_order: source
+            merge_init_into_class: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_symbol_type_heading: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - fenced_code
+  - footnotes
+  - md_in_html
+  - tables
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/vcoderun/acprouter
+
+extra_css:
+  - stylesheets/tweaks.css
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quickstart: getting-started/quickstart.md
+      - Agent Server Setup: getting-started/agent-server.md
+      - CLI: cli.md
+  - Documentation:
+      - Gateway Construction: gateway.md
+      - Telegram Surface: telegram.md
+      - Remote ACP Bridges: remote-acp.md
+  - Examples:
+      - Overview: examples/index.md
+      - Local Pydantic Agent: examples/local-pydantic.md
+      - Local LangChain Graph: examples/local-langchain.md
+      - In-Process Router: examples/in-process.md
+      - Remote ACP: examples/remote-acp.md
+  - API Reference:
+      - acprouter: api/acprouter.md
+  - About: about/index.md
